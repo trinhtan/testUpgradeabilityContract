@@ -1,13 +1,13 @@
-const DAI = artifacts.require('DAI');
-const DAI_2 = artifacts.require('DAI_2');
+const DAILogic1 = artifacts.require('DAILogic1');
+const DAILogic2 = artifacts.require('DAILogic2');
 
 const DAIProxy = artifacts.require('DAIProxy');
 const DAIProxyAdmin = artifacts.require('DAIProxyAdmin');
 
 contract('DAI Proxy', ([proxyAdmin, daiOwner, user, someuser]) => {
   it('DAI Proxy', async () => {
-    // deploy DAI
-    let dai = await DAI.new({ from: someuser });
+    // deploy DAILogic1
+    let dai = await DAILogic1.new({ from: someuser });
 
     // deploy DAIProxyAdmin
     let daiProxyAdmin = await DAIProxyAdmin.new({ from: proxyAdmin });
@@ -20,8 +20,8 @@ contract('DAI Proxy', ([proxyAdmin, daiOwner, user, someuser]) => {
       from: daiOwner,
     });
 
-    // create DAI instance at daiProxy.address
-    let realDai = await DAI.at(daiProxy.address);
+    // create DAILogic1 instance at daiProxy.address
+    let realDai = await DAILogic1.at(daiProxy.address);
 
     // Mint 1000 for user
     await realDai.mint(user, '1000', { from: daiOwner });
@@ -29,11 +29,11 @@ contract('DAI Proxy', ([proxyAdmin, daiOwner, user, someuser]) => {
     // check user's balance = 1000
     assert.equal(await realDai.balanceOf(user), '1000');
 
-    // deploy DAI_2
-    let dai_2 = await DAI_2.new({ from: someuser });
+    // deploy DAILogic2
+    let daiLogic2 = await DAILogic2.new({ from: someuser });
 
-    // upgrade daiProxy's implementation to dai_2.address
-    await daiProxyAdmin.upgrade(daiProxy.address, dai_2.address);
+    // upgrade daiProxy's implementation to daiLogic2
+    await daiProxyAdmin.upgrade(daiProxy.address, daiLogic2.address);
 
     // mint 1000 for user
     await realDai.mint(user, '1000', { from: daiOwner });

@@ -1,7 +1,6 @@
 pragma solidity >=0.6.0 <0.8.0;
 
 contract SampleLogic2 {
-
     address public owner;
     bool public initialized;
     mapping(address => uint256) public balances;
@@ -16,8 +15,7 @@ contract SampleLogic2 {
         _;
     }
 
-    constructor () public {
-    }
+    constructor() public {}
 
     function initialize() public initializer {
         owner = msg.sender;
